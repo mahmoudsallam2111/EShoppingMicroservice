@@ -7,6 +7,7 @@
     <UserSecretsId>784b2af4-8b22-40d5-9741-f893a1349e26</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,11 +19,8 @@
 
   <ItemGroup>
     <PackageReference Include="Carter" Version="8.0.0" />
+    <PackageReference Include="Marten" Version="7.3.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Products\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
