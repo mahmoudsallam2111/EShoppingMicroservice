@@ -5,12 +5,11 @@
 
     public record UpdateProductResult(bool Issuccessed);
 
-    internal class UpdateProductCommandHandler(IDocumentSession session, ILogger<UpdateProductCommandHandler> logger)
+    internal class UpdateProductCommandHandler(IDocumentSession session)
         : ICommandHandler<UpdateProductCommand, UpdateProductResult>
     {
         public async Task<UpdateProductResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("UpdateproductsCommand Handler called with {@Query}", request);
 
             var productToUpdate = await session.LoadAsync<Product>(request.Id, cancellationToken);
             if (productToUpdate is null)

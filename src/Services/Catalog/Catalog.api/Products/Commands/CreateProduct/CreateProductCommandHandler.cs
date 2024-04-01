@@ -1,4 +1,6 @@
-﻿namespace Catalog.api.Products.Commands.CreateProduct;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Catalog.api.Products.Commands.CreateProduct;
 
 public record CreateProductCommand(string Name , List<string> Category , string Description , string ImageFile , decimal Price)
   :ICommand<CreateProductResult>;

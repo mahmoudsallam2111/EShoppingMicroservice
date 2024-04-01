@@ -3,13 +3,11 @@
     public record GetProductByIdQuery(Guid id) : IQuery<GetProductByIdResult>;
 
     public record GetProductByIdResult(Product Product);
-    public class GetProductByIdQueryHandler (IDocumentSession session , ILogger<GetProductByIdQueryHandler> logger)
+    public class GetProductByIdQueryHandler (IDocumentSession session)
         : IQueryHandler<GetProductByIdQuery, GetProductByIdResult>
     {
         public async Task<GetProductByIdResult> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
         {
-            logger.LogInformation("GetproductsQuery Handler called with {@Query} ", query);
-
             var product =await session.Query<Product>()
                 .SingleOrDefaultAsync(p => p.Id == query.id);
 
