@@ -1,7 +1,9 @@
 using BuildingBlocks.Behavoirs;
 using BuildingBlocks.Exceptions.Handler;
 using Catalog.api.Data;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +38,9 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();   // register custom exception Handlker
 
+builder.Services.AddHealthChecks()   //perform health check for backend service
+    .AddNpgSql(builder.Configuration.GetConnectionString("connectionString")!);  // perform health check for pg database
+
 #endregion
 
 var app = builder.Build();
@@ -45,5 +50,10 @@ app.MapCarter();
 
 //add exception handler to request pipeline
 app.UseExceptionHandler(opt => { });
+
+app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
