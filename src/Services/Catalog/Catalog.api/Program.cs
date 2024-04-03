@@ -25,7 +25,7 @@ builder.Services.AddMediatR(config =>
 //register maretn lib
 builder.Services.AddMarten(opt =>
 {
-    opt.Connection(builder.Configuration.GetConnectionString("connectionString")!);
+    opt.Connection(builder.Configuration.GetConnectionString("Database")!);
 }).UseLightweightSessions();
 
 //register seeding of data
@@ -39,7 +39,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();   // register custom exception Handlker
 
 builder.Services.AddHealthChecks()   //perform health check for backend service
-    .AddNpgSql(builder.Configuration.GetConnectionString("connectionString")!);  // perform health check for pg database
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);  // perform health check for pg database
 
 #endregion
 
