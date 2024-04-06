@@ -11,7 +11,7 @@ namespace Basket.Api.Basket.Queries.GetBasket
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/Basket/{userName}" , async (string UserName , ISender sender) =>
+            app.MapGet("/basket/{userName}" , async (string UserName , ISender sender) =>
             {
                 var result =await sender.Send(new GetBasketQuery(UserName));
 
@@ -20,7 +20,7 @@ namespace Basket.Api.Basket.Queries.GetBasket
                 return Results.Ok(response);
 
             }).WithName("GetBasketByUserName")
-                .Produces<GetBasketResponse>(StatusCodes.Status201Created)
+                .Produces<GetBasketResponse>(StatusCodes.Status200OK)
                 .ProducesProblem(StatusCodes.Status400BadRequest)
                .WithSummary("Get Basket By UserName")
                .WithDescription("Get Basket By UserName");
