@@ -4,9 +4,7 @@ option csharp_namespace = "Discount.Grpc";
 
 package discount;
 
-// The greeting service definition.
 service DiscountProtoService {
-  // Sends a greeting
   rpc GetDiscount(GetDiscountRequest) returns (CouponModel);
   rpc CreateDiscount(CreateDiscountRequest) returns (CouponModel);
   rpc UpdateDiscount(UpdateDiscountRequest) returns (CouponModel);

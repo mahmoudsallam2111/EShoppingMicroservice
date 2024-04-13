@@ -3,6 +3,7 @@ using Basket.Api.Models;
 using BuildingBlocks.Behavoirs;
 using BuildingBlocks.Exceptions.Handler;
 using Carter;
+using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Marten;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -40,10 +41,26 @@ builder.Services.AddStackExchangeRedisCache(opt =>
 });
 
 
-builder.Services.AddExceptionHandler<CustomExceptionHandler>();   // register custom exception Handlker
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();   // register custom exception Handlder
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
+
+
+// register gRpc services
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(opt =>
+{
+    opt.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler()
+    {
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+
+    return handler;
+});
 
 #endregion
 
