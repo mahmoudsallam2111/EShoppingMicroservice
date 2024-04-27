@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ordering.Application.Data;
 using Ordering.Infrastrucure.Data;
 using Ordering.Infrastrucure.Data.Interceptors;
 
@@ -22,6 +23,8 @@ namespace Ordering.Infrastrucure
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>()); // get all services register to isavechangeinterceptor
                 options.UseSqlServer(connectionString);  
             });
+
+            services.AddScoped<IApplicationDbContext,ApplicationDbContext>();    // create an abstraction for dbcontext to use it in application layer
 
             return services;
         }

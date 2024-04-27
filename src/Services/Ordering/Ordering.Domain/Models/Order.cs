@@ -38,9 +38,8 @@ public class Order : Aggregate<OrderId>
         return order;
     }
 
-    public void Update(CusomrerId customerId, OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment, OrderStatus status, List<OrderItem> orderItems, decimal totalPrice)
+    public void Update(OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment, OrderStatus status)
     {
-        CustomerId = customerId;
         OrderName = orderName;
         ShippingAddress = shippingAddress;
         BillingAddress = billingAddress;
