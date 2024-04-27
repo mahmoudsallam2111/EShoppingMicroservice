@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Ordering.Infrastrucure.Data;
+using Ordering.Infrastrucure.Data.Interceptors;
 
 namespace Ordering.Infrastrucure
 {
@@ -15,7 +14,14 @@ namespace Ordering.Infrastrucure
             var connectionString = configuration.GetConnectionString("Database");
 
             // regiter serives here
+            services.AddScoped<ISaveChangesInterceptor , AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor , DispatchDomainEventsInterceptor>();
 
+            services.AddDbContext<ApplicationDbContext>((sp,options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>()); // get all services register to isavechangeinterceptor
+                options.UseSqlServer(connectionString);  
+            });
 
             return services;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;    // this namesapace come from fluentvalidation.asp.net core which exist in buliding blocks
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;    // this namesapace come from fluentvalidation.asp.net core which exist in buliding blocks
 
 namespace Ordering.Application
 {
@@ -7,7 +8,10 @@ namespace Ordering.Application
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
             //add services here
-
+            services.AddMediatR(configuration =>
+            {
+                configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
             return services;
         }
     }
