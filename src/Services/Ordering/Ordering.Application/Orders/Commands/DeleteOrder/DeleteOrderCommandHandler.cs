@@ -12,8 +12,9 @@ namespace Ordering.Application.Orders.Commands.DeleteOrder
         public async Task<DeleteOrderResult> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
             var orderId = OrderId.Of(request.orderId);
+
             var orderToDelete = await dbContext.Orders
-                .FirstOrDefaultAsync(a => a.Id == orderId);
+                .FindAsync([orderId] , cancellationToken);
 
             if (orderToDelete == null)
             {

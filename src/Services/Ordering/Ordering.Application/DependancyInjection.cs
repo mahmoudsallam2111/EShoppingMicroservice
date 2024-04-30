@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BuildingBlocks.Behavoirs;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;    // this namesapace come from fluentvalidation.asp.net core which exist in buliding blocks
 
 namespace Ordering.Application
@@ -11,6 +12,8 @@ namespace Ordering.Application
             services.AddMediatR(configuration =>
             {
                 configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                configuration.AddOpenBehavior(typeof(LoggingBehavoir<,>));
+                configuration.AddOpenBehavior(typeof(ValidationBehavoir<,>));
             });
             return services;
         }
