@@ -9,21 +9,21 @@ using Ordering.Domain.ValueObjects;
 
 namespace Ordering.Application.Orders.Commands.UpdateOrder;
 
-public class UpdateOrderCommandHandler(IApplicationDbContext dbContext , IMapper mapper)
+public class UpdateOrderCommandHandler(IApplicationDbContext dbContext)
     : ICommandHandler<UpdateOrderCommand, UpdateOrderResult>
 {
     public async Task<UpdateOrderResult> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
     {
-        var orderId = OrderId.Of(request.OrderDto.Id);
+        var orderId = OrderId.Of(request.Order.Id);
         var order =await dbContext.Orders
-            .FindAsync(orderId , cancellationToken);
+            .FindAsync([orderId] , cancellationToken);
 
         if (order is null)
         {
-            throw new OrderNotFoundException(request.OrderDto.Id);
+            throw new OrderNotFoundException(request.Order.Id);
         }
 
-        UpdateOrderWithNewValues(order, request.OrderDto);
+        UpdateOrderWithNewValues(order, request.Order);
         
         dbContext.Orders.Update(order);
         await dbContext.SaveChangesAsync(cancellationToken);

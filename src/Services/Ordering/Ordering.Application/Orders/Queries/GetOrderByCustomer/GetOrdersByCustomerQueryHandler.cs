@@ -1,26 +1,25 @@
 ﻿using BuildingBlocks.CQRS;
-using MapsterMapper;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Application.Data;
 using Ordering.Application.Dtos;
-using Ordering.Application.Orders.Queries.GetOrderByName;
+using Ordering.Application.Extensions;
+using Ordering.Domain.StronglyTypedIds;
 
 namespace Ordering.Application.Orders.Queries.GetOrderByCustomer
 {
-    public class GetOrdersByCustomerQueryHandler(IApplicationDbContext dbContext , IMapper mapper)
+    public class GetOrdersByCustomerQueryHandler(IApplicationDbContext dbContext)
         : IQueryHandler<GetOrdersByCustomerQuery, GetOrdersByCustomerResult>
     {
         public async Task<GetOrdersByCustomerResult> Handle(GetOrdersByCustomerQuery request, CancellationToken cancellationToken)
         {
             var orders = await dbContext.Orders
                  .AsNoTracking()
-                 .Where(o => o.CustomerId.Value == request.CustomerId)
+                 .Where(o => o.CustomerId == CusomrerId.Of(request.CustomerId))
                   .OrderBy(o => o.OrderName.Value)    
                  .ToListAsync(cancellationToken);
 
-             var ordersDtos = mapper.Map<List<OrderDto>>(orders);
-
-            return new GetOrdersByCustomerResult(ordersDtos);
+            return new GetOrdersByCustomerResult(orders.ToOrderDtoList());
         }
     }
 }

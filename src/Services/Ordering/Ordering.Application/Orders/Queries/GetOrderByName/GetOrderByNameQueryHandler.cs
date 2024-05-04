@@ -1,13 +1,16 @@
 ﻿using BuildingBlocks.CQRS;
+using Mapster;
 using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Application.Data;
 using Ordering.Application.Dtos;
+using Ordering.Application.Extensions;
+using System.Collections.Generic;
 
 namespace Ordering.Application.Orders.Queries.GetOrderByName
 {
-    public class GetOrderByNameQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
+    public class GetOrderByNameQueryHandler(IApplicationDbContext dbContext)
         : IQueryHandler<GetOrdersByNameQuery, GetOrdersByNameResult>
     {
 
@@ -20,9 +23,8 @@ namespace Ordering.Application.Orders.Queries.GetOrderByName
              .OrderBy(o => o.OrderName.Value)
              .ToListAsync(cancellationToken);
 
-            var orderDtos = mapper.Map<List<OrderDto>>(orders);
 
-            return new GetOrdersByNameResult(orderDtos);
+            return new GetOrdersByNameResult(orders.ToOrderDtoList());
         }
     }
 }

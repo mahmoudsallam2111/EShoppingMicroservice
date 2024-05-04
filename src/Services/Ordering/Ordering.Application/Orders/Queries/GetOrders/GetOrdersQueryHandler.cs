@@ -1,13 +1,14 @@
 ﻿using BuildingBlocks.CQRS;
 using BuildingBlocks.Pagination;
-using MapsterMapper;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Application.Data;
 using Ordering.Application.Dtos;
+using Ordering.Application.Extensions;
 
 namespace Ordering.Application.Orders.Queries.GetOrders
 {
-    public class GetOrdersQueryHandler(IApplicationDbContext dbContext , IMapper mapper)
+    public class GetOrdersQueryHandler(IApplicationDbContext dbContext)
         : IQueryHandler<GetOrdersQuery, GetOrdersQueryResult>
     {
         public async Task<GetOrdersQueryResult> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
@@ -24,13 +25,13 @@ namespace Ordering.Application.Orders.Queries.GetOrders
                                 .Take(pageSize)
                                 .ToListAsync(cancellationToken);
 
-            var ordersDto = mapper.Map<List<OrderDto>>(orders);
+
 
             return new GetOrdersQueryResult(new PaginatedResult<OrderDto>(
                 pageIndex,
                 pageSize,
                 totalCountOfOrders,
-                ordersDto
+                orders.ToOrderDtoList()
                 ));
             
         }

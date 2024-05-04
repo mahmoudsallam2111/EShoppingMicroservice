@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Behavoirs;
+using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;    // this namesapace come from fluentvalidation.asp.net core which exist in buliding blocks
 
@@ -15,6 +16,8 @@ namespace Ordering.Application
                 configuration.AddOpenBehavior(typeof(LoggingBehavoir<,>));
                 configuration.AddOpenBehavior(typeof(ValidationBehavoir<,>));
             });
+
+
             return services;
         }
     }

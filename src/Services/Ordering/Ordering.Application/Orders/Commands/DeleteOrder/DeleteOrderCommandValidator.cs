@@ -6,7 +6,7 @@ namespace Ordering.Application.Orders.Commands.DeleteOrder
     {
         public DeleteOrderCommandValidator()
         {
-            RuleFor(o => o.orderId).NotEmpty().WithMessage("OrderId can not be Empty");
+            RuleFor(o => o.OrderId).NotEmpty().WithMessage("OrderId can not be Empty");
         }
     }
 }

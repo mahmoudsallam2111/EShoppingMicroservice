@@ -11,14 +11,14 @@ namespace Ordering.Application.Orders.Commands.DeleteOrder
     {
         public async Task<DeleteOrderResult> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
-            var orderId = OrderId.Of(request.orderId);
+            var orderId = OrderId.Of(request.OrderId);
 
             var orderToDelete = await dbContext.Orders
                 .FindAsync([orderId] , cancellationToken);
 
             if (orderToDelete == null)
             {
-                throw new OrderNotFoundException(request.orderId);
+                throw new OrderNotFoundException(request.OrderId);
             }
             dbContext.Orders.Remove(orderToDelete);
             await dbContext.SaveChangesAsync(cancellationToken);
