@@ -7,6 +7,7 @@ using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Marten;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using BuildingBlocks.Messaging.Mass_Transint;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,8 +41,10 @@ builder.Services.AddStackExchangeRedisCache(opt =>
     opt.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
 
+builder.Services.AddMessageBrokers(builder.Configuration);   // register message broker to basket service
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();   // register custom exception Handlder
+
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);

@@ -35,7 +35,7 @@ namespace Ordering.API
             application.MapCarter();
 
             application.UseExceptionHandler(opt => { });    // add to pipe line
-                                                            // 
+                                                            
             application.UseHealthChecks("/health", new HealthCheckOptions
             {
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
