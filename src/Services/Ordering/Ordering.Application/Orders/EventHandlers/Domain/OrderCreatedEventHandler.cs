@@ -1,15 +1,32 @@
-﻿using MediatR;
+﻿using MassTransit;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
+using Ordering.Application.Extensions;
 using Ordering.Domain.Events;
 
 namespace Ordering.Application.Orders.EventHandlers.Domain
 {
-    public class OrderCreatedEventHandler :
-        INotificationHandler<OrderCreatedEvent>
+    /// <summary>
+    /// here we will raise an integration event to continue the process of fullfillment of the order
+    /// </summary>
+    /// <param name="publishEndpoint"></param>
+    public class OrderCreatedEventHandler (IPublishEndpoint publishEndpoint , IFeatureManager featureManager , ILogger<OrderCreatedEventHandler> logger)
+       : INotificationHandler<OrderCreatedEvent>
     {
-        public Task Handle(OrderCreatedEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(OrderCreatedEvent domainEvent, CancellationToken cancellationToken)
         {
-            //throw new NotImplementedException();
-          return  Task.CompletedTask;
+            logger.LogInformation("Domain Event Handlled : {DomainEvent}",domainEvent.GetType().Name);
+
+
+            // here we will use asp.featute management to enable only this feature(lines of code) 
+            // when there is a subscriber to this , to prvent unneccessary messages
+            if (await featureManager.IsEnabledAsync("OrderFullfilment"))
+            {
+                var orderCreatedIntegarstionEvent = domainEvent.Order.ToOrderDto();
+                await publishEndpoint.Publish(orderCreatedIntegarstionEvent, cancellationToken);
+            }
+
         }
     }
 }

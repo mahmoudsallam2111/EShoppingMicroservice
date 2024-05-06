@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region Register Services
 
 builder.Services.
-     AddApplicationService()
+     AddApplicationService(builder.Configuration)
     .AddInfrastractureservices(builder.Configuration)
     .AddApiServices(builder.Configuration);
 
